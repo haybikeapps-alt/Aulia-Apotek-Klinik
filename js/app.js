@@ -258,6 +258,7 @@ function startApp(userRole, userName) {
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+      console.log("UID LOGIN:", user.uid);
         var overlay = document.getElementById('login-overlay');
         if (overlay) overlay.remove();
 
