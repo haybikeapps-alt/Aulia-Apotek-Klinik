@@ -263,7 +263,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         if (overlay) overlay.remove();
 
         db.collection('users').doc(user.uid).get().then(function(doc) {
-            if (doc.exists) {
+    console.log("DOC EXISTS:", doc.exists);
+    console.log("DOC DATA:", doc.data());
+    if (doc.exists) {
                 var userData = doc.data();
                 if (userData.status === 'nonaktif') {
                     Utils.toast('Akun Anda dinonaktifkan. Hubungi Admin.', 'error');
