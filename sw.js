@@ -1,50 +1,48 @@
 /**
  * Service Worker — Aulia Apotek Klinik
- * Strategi: cache-first untuk shell, stale-while-revalidate untuk asset modul.
+ * Fix: path disesuaikan untuk GitHub Pages (/Aulia-Apotek-Klinik/)
  */
-const CACHE_NAME = 'aulia-apotek-klinik-v2';
+const CACHE_NAME = 'aulia-apotek-klinik-v3';
+const BASE = '/Aulia-Apotek-Klinik';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/css/style.css',
-    '/js/app.js',
-    '/js/auth.js',
-    '/js/dashboard.js',
-    '/js/apotek/obat.js',
-    '/js/apotek/transaksi.js',
-    '/js/apotek/pembelian.js',
-    '/js/apotek/stockOpname.js',
-    '/js/apotek/notifikasi.js',
-    '/js/apotek/retur.js',
-    '/js/klinik/antrian.js',
-    '/js/klinik/pasien.js',
-    '/js/klinik/rekamMedis.js',
-    '/js/klinik/resep.js',
-    '/js/keuangan/akuntansi.js',
-    '/js/keuangan/laporanKeuangan.js',
-    '/js/keuangan/payroll.js',
-    '/js/laporan/hutang.js',
-    '/js/laporan/pengeluaran.js',
-    '/js/laporan/piutang.js',
-    '/js/laporan/penjualanHarian.js',
-    '/js/manajemen/absensi.js',
-    '/js/manajemen/karyawan.js',
-    '/js/pengaturan/gaji.js',
-    '/js/pengaturan/pembagian.js',
-    '/js/pengaturan/profil.js',
-    '/js/pengaturan/tindakan.js',
-    '/js/pengaturan/users.js',
-    
-    '/icon-192.png',
-    '/icon-512.png'
+    BASE + '/',
+    BASE + '/index.html',
+    BASE + '/manifest.json',
+    BASE + '/css/style.css',
+    BASE + '/js/app.js',
+    BASE + '/js/auth.js',
+    BASE + '/js/dashboard.js',
+    BASE + '/js/apotek/obat.js',
+    BASE + '/js/apotek/transaksi.js',
+    BASE + '/js/apotek/pembelian.js',
+    BASE + '/js/apotek/stockOpname.js',
+    BASE + '/js/apotek/notifikasi.js',
+    BASE + '/js/apotek/retur.js',
+    BASE + '/js/klinik/antrian.js',
+    BASE + '/js/klinik/pasien.js',
+    BASE + '/js/klinik/rekamMedis.js',
+    BASE + '/js/klinik/resep.js',
+    BASE + '/js/keuangan/akuntansi.js',
+    BASE + '/js/keuangan/laporanKeuangan.js',
+    BASE + '/js/keuangan/payroll.js',
+    BASE + '/js/laporan/hutang.js',
+    BASE + '/js/laporan/pengeluaran.js',
+    BASE + '/js/laporan/piutang.js',
+    BASE + '/js/laporan/penjualanHarian.js',
+    BASE + '/js/manajemen/absensi.js',
+    BASE + '/js/manajemen/karyawan.js',
+    BASE + '/js/pengaturan/gaji.js',
+    BASE + '/js/pengaturan/pembagian.js',
+    BASE + '/js/pengaturan/profil.js',
+    BASE + '/js/pengaturan/tindakan.js',
+    BASE + '/js/pengaturan/users.js',
+    BASE + '/icon-192.png',
+    BASE + '/icon-512.png'
 ];
 
 self.addEventListener('install', function(event) {
-    // FIX: jangan telan error addAll, supaya install benar-benar gagal jika cache shell rusak.
     event.waitUntil(
         caches.open(CACHE_NAME).then(function(cache) {
-            // addAll bersifat all-or-nothing; gunakan add per item agar 1 file gagal tidak menghancurkan install.
             return Promise.all(urlsToCache.map(function(url) {
                 return cache.add(url).catch(function(err) {
                     console.warn('[SW] Gagal cache:', url, err);
@@ -69,24 +67,23 @@ self.addEventListener('fetch', function(event) {
     if (req.method !== 'GET') return;
 
     var url = new URL(req.url);
-    // Jangan cache Firestore/Auth dynamic API
+    // Jangan cache Firebase API
     if (url.hostname.indexOf('firestore') !== -1 ||
         url.hostname.indexOf('googleapis.com') !== -1 ||
-        url.hostname.indexOf('identitytoolkit') !== -1) {
-        return; // biarkan network handle
+        url.hostname.indexOf('identitytoolkit') !== -1 ||
+        url.hostname.indexOf('firebase') !== -1) {
+        return;
     }
 
     event.respondWith(
         caches.match(req).then(function(cached) {
             var fetchPromise = fetch(req).then(function(networkRes) {
-                // FIX: izinkan basic, cors, dan opaque (CDN) untuk di-cache.
                 if (networkRes && (networkRes.type === 'basic' || networkRes.type === 'cors' || networkRes.type === 'opaque')) {
                     var clone = networkRes.clone();
                     caches.open(CACHE_NAME).then(function(cache) { cache.put(req, clone); });
                 }
                 return networkRes;
             }).catch(function() { return cached; });
-            // stale-while-revalidate
             return cached || fetchPromise;
         })
     );
