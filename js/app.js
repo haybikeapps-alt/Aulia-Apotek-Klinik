@@ -92,12 +92,14 @@ const menuStructure = {
         { id: 'obat', label: 'Obat & Stock', icon: 'pill', module: 'apotek/obat' },
         { id: 'pembelian', label: 'Pembelian', icon: 'truck', module: 'apotek/pembelian' },
         { id: 'stockOpname', label: 'Stock Opname', icon: 'clipboard-check', module: 'apotek/stockOpname' },
+        { id: 'retur', label: 'Retur Supplier', icon: 'package-open', module: 'apotek/retur' },
         { id: 'notifikasi', label: 'Alert Stok', icon: 'bell', module: 'apotek/notifikasi' }
     ],
     laporan: [
         { id: 'hutang', label: 'Hutang Usaha', icon: 'file-text', module: 'laporan/hutang' },
         { id: 'pengeluaran', label: 'Pengeluaran', icon: 'receipt', module: 'laporan/pengeluaran' },
-        { id: 'piutang', label: 'Piutang Karyawan', icon: 'wallet', module: 'laporan/piutang' }
+        { id: 'piutang', label: 'Piutang Karyawan', icon: 'wallet', module: 'laporan/piutang' },
+        { id: 'penjualanHarian', label: 'Penjualan Harian', icon: 'trending-up', module: 'laporan/penjualanHarian' }
     ],
     manajemen: [
         { id: 'karyawan', label: 'Karyawan', icon: 'user-check', module: 'manajemen/karyawan' },
