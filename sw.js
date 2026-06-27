@@ -15,6 +15,8 @@ const urlsToCache = [
     '/js/apotek/transaksi.js',
     '/js/apotek/pembelian.js',
     '/js/apotek/stockOpname.js',
+    '/js/apotek/notifikasi.js',
+    '/js/apotek/retur.js',
     '/js/klinik/antrian.js',
     '/js/klinik/pasien.js',
     '/js/klinik/rekamMedis.js',
@@ -25,6 +27,7 @@ const urlsToCache = [
     '/js/laporan/hutang.js',
     '/js/laporan/pengeluaran.js',
     '/js/laporan/piutang.js',
+    '/js/laporan/penjualanHarian.js',
     '/js/manajemen/absensi.js',
     '/js/manajemen/karyawan.js',
     '/js/pengaturan/gaji.js',
@@ -32,6 +35,7 @@ const urlsToCache = [
     '/js/pengaturan/profil.js',
     '/js/pengaturan/tindakan.js',
     '/js/pengaturan/users.js',
+    
     '/icon-192.png',
     '/icon-512.png'
 ];
